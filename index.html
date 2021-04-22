@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bingo</title>
 </head>
-  <!--
+<!--
         BINGO CHALLENGE!!!
         Create programmatically (with JS) a BINGO board with 76 cells, from 1 to 76.
         Create a button to randomize a number from 1 to 76. The same number should be highlighted on the bingo board
@@ -16,14 +17,20 @@
         - Create a USER BOARD with 24 randomized numbers that highlights as the main board does
         - Let the user choose HOW MANY user boards he's willing to play with and create them.
     -->
-<body>
-    <div id="bingo">
-        <table id="bingoTable">
-            <!-- cells will be installed here -->
-        </table>
-        <button id="randomButton">Random Numbers</button>
 
-        <h3>Random Numbers:</h3>
+<body>
+    <div id="mainDiv">
+
+        <div id="bingo">
+            <h1>BINGO</h1>
+        </div>
+        <div id="divContent">
+
+        </div>
+
+        <input id="btn" type="button" value="Provo fatin!" onclick="play()" />
+        <div id="output"></div>
+
     </div>
 </body>
 
