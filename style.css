@@ -39,7 +39,7 @@ width: 50%;
 border: 1px solid rgb(122, 41, 41);
 
 }
-#btn{ 
+#sort{ 
 margin: 50px auto;
 width: 100px;
 height: 50px;
@@ -50,6 +50,6 @@ font-weight: bold;
 
 }
 
-#output {
+#bingo {
 margin: 0 auto;
 }
