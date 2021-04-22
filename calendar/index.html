@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8" />
+
+    <title>Calendar</title>
+
+    <link
+
+      rel="stylesheet"
+
+      href="https://fonts.googleapis.com/css?family=Nunito&display=swap"
+
+    />
+
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <style></style>
+
+  </head>
+
+  <body>
+
+    <h1>Calendar</h1>
+
+    <div id="calendar">
+
+      <!-- day cells will be inserted here -->
+
+      <!-- <div class="day"><h3>1</h3</div> -->
+
+    </div>
+
+    <h1>Add Event</h1>
+
+    <div id="addMeeting">
+
+      <div>
+
+        <h4>Meeting Day</h4>
+
+        <h4 id="meeting-day">Click on a Day</h4>
+
+      </div>
+
+      <div>
+
+        <h4>Meeting Time</h4>
+
+        <input type="time" id="meeting-time" />
+
+      </div>
+
+      <div>
+
+        <h4>Meeting Name</h4>
+
+        <input
+
+          type="text"
+
+          id="meeting-name"
+
+          placeholder="Insert a name for the meeting"
+
+        />
+
+      </div>
+
+      <div>
+
+        <h4>Add</h4>
+
+        <button onclick="saveMeeting()">Save Meeting</button>
+
+      </div>
+
+    </div>
+
+    <div id="appointments">
+
+      <h1>Appointments for the day!</h1>
+
+      <ul id="appointment-list">
+
+        <!-- we need to insert the appointments here -->
+
+        <!-- <li></li> -->
+
+      </ul>
+
+    </div>
+
+    <script>
+
+      // we need to calculate how many days are there in the current month
+
+      //  so we can create an appropriate number of cells
+
+
+
+      let appointments = [];
+
+
+
+      //   appointment is like
+
+      //   [
+
+      //
+
+      //   ]
+
+
+
+      const daysInThisMonth = function () {
+
+        let now = new Date(); // invoking the Date constructor like this
+
+        // will return us this specific moment in time
+
+        // console.log(now.getMonth());
+
+        // to calculate which is the last day of this month
+
+        // we'll need to jump in the first day of the next month
+
+        // in the 0 day, which in JS means the last day of the previous month
+
+        let lastDateOfTheMonth = new Date(
+
+          now.getFullYear(),
+
+          now.getMonth() + 1,
+
+          0
+
+        );
+
+        let numberOfDays = lastDateOfTheMonth.getDate();
+
+        return numberOfDays;
+
+        // we're creating a new date, passing the following parameter to the Date constructor:
+
+        // the current year, the next month (current + 1), and 0 is for
+
+        // subtracting exactly ONE day from that.
+
+      };
+
+
+
+      const showAppointments = function (index) {
+
+        let appointmentsToShow = appointments[index]; // it will be appointments[0]
+
+        // if we have clicked on the first cell, the 1st of april
+
+        let appointmentList = document.getElementById("appointment-list");
+
+        // appointmentList is a <ul>
+
+
+
+        // here we need to clear previous <li>
+
+        appointmentList.innerHTML = ""; // setting an empty string as the content for our UL
+
+        // quick & dirty :)
+
+
+
+        for (let i = 0; i < appointmentsToShow.length; i++) {
+
+          let listItem = document.createElement("li");
+
+          // <li></li>
+
+          listItem.innerText = appointmentsToShow[i];
+
+          appointmentList.appendChild(listItem);
+
+        }
+
+        document.getElementById("appointments").style.display = "block";
+
+      };
+
+
+
+      window.onload = function () {
+
+        let numberOfDays = daysInThisMonth();
+
+        console.log(numberOfDays);
+
+
+
+        // let's grab a reference to the calendar section in the page
+
+        let calendar = document.getElementById("calendar");
+
+
+
+        // let's create 30 cells in april
+
+        for (let i = 0; i < numberOfDays; i++) {
+
+          // let's create a cell, a square div
+
+          let cell = document.createElement("div");
+
+          // our cell is <div></div>
+
+
+
+          cell.classList.add("day");
+
+          // our cell is <div class="day"></div>
+
+
+
+          let day = document.createElement("h3");
+
+          //  day is <h3></h3>
+
+
+
+          day.innerText = i + 1;
+
+          //  day is <h3> 1 </h3>, or <h3> 2 </h3>
+
+
+
+          // insert the h3 into the div
+
+          cell.appendChild(day);
+
+
+
+          // our cell with its title is in memory, but we need to add the cell to the calendar now
+
+          calendar.appendChild(cell);
+
+
+
+          appointments[i] = [];
+
+
+
+          /* appointments is like:
+
+            [
+
+              [], [], [], [], [],
+
+              [], [], [], [], [],
+
+              [], [], [], [], [],
+
+              [], [], [], [], [],
+
+              ...
+
+            ]
+
+        */
+
+
+
+          // appointments[18].push
+
+
+
+          // cell.addEventListener('click', /*PUT YOUR FUNCTION HERE*/)
+
+          cell.onclick = function (event) {
+
+            // console.log(event.currentTarget);
+
+            // event.currentTarget is the HTML element that we clicked on
+
+
+
+            // I really need to remove it before assigning it to the new element
+
+            // now I search for any element already containing the "selected" class
+
+            let alreadySelectedElement = document.querySelector(".selected");
+
+
+
+            // alreadySelectedElement is the previous selected element, if present
+
+            // with the "selected" class in this moment in time
+
+
+
+            // console.log(selected);
+
+            if (alreadySelectedElement) {
+
+              //   console.log("WE ALREADY HAVE A SELECTED ELEMENT");
+
+              //   console.log("I WILL NOW REMOVE THE SELECTED CLASS FROM");
+
+              //   console.log(alreadySelectedElement);
+
+              // if there are already selected cells in the page
+
+              // let's remove them from it
+
+              // so let's remove the selected class from every other element
+
+              alreadySelectedElement.classList.remove("selected");
+
+            }
+
+
+
+            // so now the slate will be clean every time
+
+
+
+            event.currentTarget.classList.add("selected");
+
+
+
+            let clickOnADayH4 = document.getElementById("meeting-day");
+
+            clickOnADayH4.innerText = i + 1;
+
+
+
+            let todayAppointments = appointments[i];
+
+            if (todayAppointments.length > 0) {
+
+              console.log("we have events here!");
+
+              showAppointments(i);
+
+            } else {
+
+              console.log("no events for this day");
+
+              document.getElementById("appointments").style.display = "none";
+
+            }
+
+          };
+
+        }
+
+      };
+
+
+
+      const saveMeeting = function () {
+
+        let meetingDay = document.getElementById("meeting-day").innerText;
+
+        let meetingTime = document.getElementById("meeting-time").value;
+
+        let meetingName = document.getElementById("meeting-name").value;
+
+
+
+        console.log(meetingDay);
+
+        console.log(meetingTime);
+
+        console.log(meetingName);
+
+
+
+        let eventString = meetingTime + " - " + meetingName; // 15:00 - Meeting
+
+
+
+        console.log(appointments);
+
+
+
+        let positionInAppointments = parseInt(meetingDay) - 1; // parsing the meetingDay because it was a string
+
+        appointments[positionInAppointments].push(eventString);
+
+
+
+        console.log(appointments);
+
+
+
+        showAppointments(meetingDay - 1);
+
+      };
+
+    </script>
+
+  </body>
+
+</html>
