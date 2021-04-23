@@ -1,407 +1,239 @@
+  
 <!DOCTYPE html>
-
-<html lang="en">
-
-  <head>
-
-    <meta charset="utf-8" />
-
-    <title>Calendar</title>
-
-    <link
-
-      rel="stylesheet"
-
-      href="https://fonts.googleapis.com/css?family=Nunito&display=swap"
-
-    />
-
-    <link rel="stylesheet" type="text/css" href="style.css" />
-
-    <style></style>
-
-  </head>
-
-  <body>
-
-    <h1>Calendar</h1>
-
-    <div id="calendar">
-
-      <!-- day cells will be inserted here -->
-
-      <!-- <div class="day"><h3>1</h3</div> -->
-
-    </div>
-
-    <h1>Add Event</h1>
-
-    <div id="addMeeting">
-
-      <div>
-
-        <h4>Meeting Day</h4>
-
-        <h4 id="meeting-day">Click on a Day</h4>
-
-      </div>
-
-      <div>
-
-        <h4>Meeting Time</h4>
-
-        <input type="time" id="meeting-time" />
-
-      </div>
-
-      <div>
-
-        <h4>Meeting Name</h4>
-
-        <input
-
-          type="text"
-
-          id="meeting-name"
-
-          placeholder="Insert a name for the meeting"
-
-        />
-
-      </div>
-
-      <div>
-
-        <h4>Add</h4>
-
-        <button onclick="saveMeeting()">Save Meeting</button>
-
-      </div>
-
-    </div>
-
-    <div id="appointments">
-
-      <h1>Appointments for the day!</h1>
-
-      <ul id="appointment-list">
-
-        <!-- we need to insert the appointments here -->
-
-        <!-- <li></li> -->
-
-      </ul>
-
-    </div>
-
-    <script>
-
-      // we need to calculate how many days are there in the current month
-
-      //  so we can create an appropriate number of cells
-
-
-
-      let appointments = [];
-
-
-
-      //   appointment is like
-
-      //   [
-
-      //
-
-      //   ]
-
-
-
-      const daysInThisMonth = function () {
-
-        let now = new Date(); // invoking the Date constructor like this
-
-        // will return us this specific moment in time
-
-        // console.log(now.getMonth());
-
-        // to calculate which is the last day of this month
-
-        // we'll need to jump in the first day of the next month
-
-        // in the 0 day, which in JS means the last day of the previous month
-
-        let lastDateOfTheMonth = new Date(
-
-          now.getFullYear(),
-
-          now.getMonth() + 1,
-
-          0
-
-        );
-
-        let numberOfDays = lastDateOfTheMonth.getDate();
-
-        return numberOfDays;
-
-        // we're creating a new date, passing the following parameter to the Date constructor:
-
-        // the current year, the next month (current + 1), and 0 is for
-
-        // subtracting exactly ONE day from that.
-
-      };
-
-
-
-      const showAppointments = function (index) {
-
-        let appointmentsToShow = appointments[index]; // it will be appointments[0]
-
-        // if we have clicked on the first cell, the 1st of april
-
-        let appointmentList = document.getElementById("appointment-list");
-
-        // appointmentList is a <ul>
-
-
-
-        // here we need to clear previous <li>
-
-        appointmentList.innerHTML = ""; // setting an empty string as the content for our UL
-
-        // quick & dirty :)
-
-
-
-        for (let i = 0; i < appointmentsToShow.length; i++) {
-
-          let listItem = document.createElement("li");
-
-          // <li></li>
-
-          listItem.innerText = appointmentsToShow[i];
-
-          appointmentList.appendChild(listItem);
+<html>
+    <head>
+        <title> Day 7 -  Calculator </title>
+        <style>
+          body {
+              background-color: #090214;
+          }
+
+          #calculator {
+              height: 100vh;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+          }
+
+        input[type=button] {
+            font-size: 30px;
+            width:50px;
+            height:50px;
+        }
+
+        #result {
+            font-size:50px;
+            text-align:right;
+            width:100%;
+            max-width:261px;
+            border-radius: 10px;;
+            background-color: rgb(205, 245, 182);
 
         }
 
-        document.getElementById("appointments").style.display = "block";
-
-      };
-
-
-
-      window.onload = function () {
-
-        let numberOfDays = daysInThisMonth();
-
-        console.log(numberOfDays);
-
-
-
-        // let's grab a reference to the calendar section in the page
-
-        let calendar = document.getElementById("calendar");
-
-
-
-        // let's create 30 cells in april
-
-        for (let i = 0; i < numberOfDays; i++) {
-
-          // let's create a cell, a square div
-
-          let cell = document.createElement("div");
-
-          // our cell is <div></div>
-
-
-
-          cell.classList.add("day");
-
-          // our cell is <div class="day"></div>
-
-
-
-          let day = document.createElement("h3");
-
-          //  day is <h3></h3>
-
-
-
-          day.innerText = i + 1;
-
-          //  day is <h3> 1 </h3>, or <h3> 2 </h3>
-
-
-
-          // insert the h3 into the div
-
-          cell.appendChild(day);
-
-
-
-          // our cell with its title is in memory, but we need to add the cell to the calendar now
-
-          calendar.appendChild(cell);
-
-
-
-          appointments[i] = [];
-
-
-
-          /* appointments is like:
-
-            [
-
-              [], [], [], [], [],
-
-              [], [], [], [], [],
-
-              [], [], [], [], [],
-
-              [], [], [], [], [],
-
-              ...
-
-            ]
-
-        */
-
-
-
-          // appointments[18].push
-
-
-
-          // cell.addEventListener('click', /*PUT YOUR FUNCTION HERE*/)
-
-          cell.onclick = function (event) {
-
-            // console.log(event.currentTarget);
-
-            // event.currentTarget is the HTML element that we clicked on
-
-
-
-            // I really need to remove it before assigning it to the new element
-
-            // now I search for any element already containing the "selected" class
-
-            let alreadySelectedElement = document.querySelector(".selected");
-
-
-
-            // alreadySelectedElement is the previous selected element, if present
-
-            // with the "selected" class in this moment in time
-
-
-
-            // console.log(selected);
-
-            if (alreadySelectedElement) {
-
-              //   console.log("WE ALREADY HAVE A SELECTED ELEMENT");
-
-              //   console.log("I WILL NOW REMOVE THE SELECTED CLASS FROM");
-
-              //   console.log(alreadySelectedElement);
-
-              // if there are already selected cells in the page
-
-              // let's remove them from it
-
-              // so let's remove the selected class from every other element
-
-              alreadySelectedElement.classList.remove("selected");
-
-            }
-
-
-
-            // so now the slate will be clean every time
-
-
-
-            event.currentTarget.classList.add("selected");
-
-
-
-            let clickOnADayH4 = document.getElementById("meeting-day");
-
-            clickOnADayH4.innerText = i + 1;
-
-
-
-            let todayAppointments = appointments[i];
-
-            if (todayAppointments.length > 0) {
-
-              console.log("we have events here!");
-
-              showAppointments(i);
-
-            } else {
-
-              console.log("no events for this day");
-
-              document.getElementById("appointments").style.display = "none";
-
-            }
-
-          };
-
+        .numericButton {
+            color:rgb(18, 85, 5);
+            background-color:rgba(130, 170, 125, 0.911);
+            border-radius:15px;
+            border-color:rgb(88, 131, 88);
         }
 
-      };
+        .functionButton {
+            color:rgb(123, 128, 124);
+            background-color: rgb(54, 4, 25);
+            border-radius: 10px;
+            border-color:rgb(103, 90, 133);
+        }
+
+        </style>
+    </head>
+
+<body>
+  <div id="calculator">
+    <table>
+       <tr>
+           <td colspan="5">
+               <input type="text" id="result" value="0" disabled />
+           </td>
+       </tr>
+
+       <tr>
+           <td><input type="button" class="numericButton" value="7" /></td>
+           <td><input type="button" class="numericButton" value="8" /></td>
+           <td><input type="button" class="numericButton" value="9" /></td>
+           <td><input type="button" class="functionButton" value="*" /></td>
+           <td><input type="button" class="functionButton" value="√" /></td>
+       </tr>
+
+       <tr>
+        <td><input type="button" class="numericButton" value="4" /></td>
+        <td><input type="button" class="numericButton" value="5" /></td>
+        <td><input type="button" class="numericButton" value="6" /></td>
+        <td><input type="button" class="functionButton" value="-" /></td>
+        <td><input type="button" class="functionButton" value="n!" /></td>
+    </tr>
+
+    <tr>
+        <td><input type="button" class="numericButton" value="1" /></td>
+        <td><input type="button" class="numericButton" value="2" /></td>
+        <td><input type="button" class="numericButton" value="3" /></td>
+        <td><input type="button" class="functionButton" value="+" /></td>
+        <td><input type="button" class="functionButton" value="p" /></td>
+    </tr>
+
+    <tr>
+        <td><input type="button" class="functionButton" value="C" /></td>
+        <td><input type="button" class="numericButton" value="0" /></td>
+        <td><input type="button" class="functionButton" value="/" /></td>
+        <td><input type="button" class="functionButton" value="=" /></td>
+        <td><input type="button" class="functionButton" value="." /></td>
+    </tr>
 
 
+    </table>
+ </div> 
 
-      const saveMeeting = function () {
+ <script>
+     window.addEventListener('DOMContentLoaded', function() {
+         console.log("Dom Loaded");
+           // Memory of our calculator
+             let operation = "";
+             let previousResult = 0; //First Oper   
+     
+              
+            //funksioni per shumen
+              const sum = function(x,y) { // const sum=(x,y)=>  
+               return x + y;
+               }
+              
+            // funksioni per zbritjen:
+               const diff = function(x,y) {
+                 return x - y;
+                }
+            // funksioni per shumzimin:
+               const mul = function(x,y) {
+             return x * y;
+               }
+       
+         const div = function(x,y) {
+             return x / y;
+             }
+         
+         // Funksioni per Fuqine
+         // const pow = (x,y) =>Math.pow(x,y) <-- Easy version
+           const power = (base, exponent) => {
+               let result =1 ;
+               for(let count = 0; count<exponent; count++){
+                   result *= base
+               }
+               return result;
+           }
+       
+       // Factorial rescursive version
+         const factorial = n => {
+             if (n <= 0 || n === 1 ) {
+                return 1;
+              } else return ( n * factorial(n - 1));
+             }
 
-        let meetingDay = document.getElementById("meeting-day").innerText;
+        // Funksioni i rrenjes katrore
+        const squareRoot = x => Math.sqrt(x)   
 
-        let meetingTime = document.getElementById("meeting-time").value;
+        // decimal function '.'
+        const inputDecimal = x => !x.includes('.') ? `${x}.`:`${x}`
 
-        let meetingName = document.getElementById("meeting-name").value;
+        // kur shtypim numrat
+        const numericButtonPressed = function (event) {
+        const numberPressed = event.target.value
+        console.log(numberPressed)
+
+          const result = document.getElementById('result')
+            if(result.value=='0'){ 
+            result.value=numberPressed
+              } else {
+                     result.value = result.value + numberPressed;//concatinating the numbers - bashkim i numrave
+                     }
+            }
+
+        // kur shtypim = - * / C = etj
+        const functionButtonPressed = function (event) {
+        const keyPressed = event.target.value;
+        console.log(keyPressed);
+        const result = document.getElementById('result');
+
+            switch(keyPressed) {
+             case '=': //compute and display the result
+                
+                 switch (operation){ // switch between: + - * /
+                    case '+':
+                    // fist operand + second operand
+                    result.value = sum(previousResult, parseFloat(result.value));
+                    // result.value = parseFloat(previousResult) + parseFloat(result.value);
+                        break;
+                    
+                    case '-':
+                    result.value = diff(previousResult, parseFloat(result.value));
+                        break;
+
+                    case '*': 
+                    result.value = mul(previousResult, parseFloat(result.value));
+                         break;
+
+                    case '/': 
+                    result.value = div(previousResult, parseFloat(result.value));
+                        break;
+
+                    case 'p': 
+                    result.value = power(previousResult, parseFloat(result.value));
+                        break;
+                    
+                    case '√': 
+                    result.value = squareRoot(result.value);
+                        break;
+
+                    case 'n!':
+                    result.value = factorial(result.value);
+                         break;
+
+                    default: 
+                    console.log('Default Case!');
+                    }
+                     break;
+
+                case 'C': // reseting everything
+                console.log("I'm the C button!")
+                result.value="0"
+                previousResult = 0;
+                    break;
+                            
+                case '.': 
+                result.value = inputDecimal(result.value)
+                    break;
+
+                default:
+                previousResult = parseFloat(result.value);//saving first operand
+                operation = keyPressed;//saving operation
+                result.value = ""; // reset to null to let user type second operand    
+                         }  
+                     }
+
+                    const numericButtons = document.getElementsByClassName("numericButton");
+                        //console.log(numericButtons);
+                    
+                    const functionButtons = document.getElementsByClassName("functionButton");
+                           //console.log(functionButtons)
+
+                    for(let button of numericButtons) {
+                        button.addEventListener('click', numericButtonPressed)
+                    }
+
+                    for(let button of functionButtons) {
+                        button.addEventListener('click', functionButtonPressed)
+                    }
+       });
 
 
+ </script>
 
-        console.log(meetingDay);
-
-        console.log(meetingTime);
-
-        console.log(meetingName);
-
-
-
-        let eventString = meetingTime + " - " + meetingName; // 15:00 - Meeting
-
-
-
-        console.log(appointments);
-
-
-
-        let positionInAppointments = parseInt(meetingDay) - 1; // parsing the meetingDay because it was a string
-
-        appointments[positionInAppointments].push(eventString);
-
-
-
-        console.log(appointments);
-
-
-
-        showAppointments(meetingDay - 1);
-
-      };
-
-    </script>
-
-  </body>
-
+</body>
 </html>
